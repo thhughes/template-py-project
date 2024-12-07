@@ -13,8 +13,9 @@ Somewhat of a basic build tooling, intended to just bootstrap things. Can extend
     - This project uses the default `pylint` library and standards. Feel free to update those requirements in `root/config/.pylintrc`
 - testing
     - Without tests, how do you know your code works? What if it changes? test runs `pytest` against the `src/tests` subdirectory. Just because it doesn't error doesn't mean you don't have bugs. 
+    - Coverage comes default with this. Tests will fail if coverage doesn't hit 80% Can change this in `config/.coveragerc` but should you? Can skip coverage as well with `--no-coverage`
 - clean 
-    - I don't like caches sitting around, command cleans them up. 
+    - Cleans up `.pytest_cache`, `__pycache__`, and `.coverage` files in repo. 
 - run
     - Runs `src/main.py` which is considered to be the actual script in the repo. You can have multiple 'main' scripts in the repo, but the setup doesn't really support that - you'd need to extend. 
     - `src/main.py` is passed in a config file `root/config/main.ini`. You're welcome to update this to a JSON or something more modern, I was just going for default support without caring to pass in all the contents over commandline and handle that via build script. 
