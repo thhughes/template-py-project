@@ -4,6 +4,7 @@ DO_TEST=false
 DO_LINT=false
 DO_RUN=false
 DO_CLEAN=false
+EXCLUDE_COVERAGE=false
 
 usage() {
     echo "Usage: $0 [--test|-t] [--lint|-l] [--run|-r] [--clean|-c] [--all|-a]"
@@ -16,6 +17,7 @@ while [[ "$#" -gt 0 ]]; do
         --lint|-l) DO_LINT=true ;;
         --run|-r) DO_RUN=true ;;
         --clean|-c) DO_CLEAN=true ;;
+        --no-coverage) EXCLUDE_COVERAGE=true ;;
         ## All skips clean so that the last output is the program output 
         --all|-a) DO_TEST=true; DO_LINT=true; DO_RUN=true ;;
         *) usage ;;
@@ -27,7 +29,11 @@ script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 
 execute_test() {
     cd "$script_dir/src"
-    pytest tests/* 
+    coverage="--cov --cov-config=${script_dir}/config/.coveragerc --cov-report=html:../output/coverage"
+    if $EXCLUDE_COVERAGE; then 
+        coverage=""
+    fi 
+    pytest ${coverage} tests/* 
     return $?
 }
 
@@ -43,30 +49,12 @@ execute_run() {
     return $?
 }
 
-clean_up_dir() {
-    if [ -d "$1" ]; then
-        echo "[INFO] Cleaning up $1"
-        rm -r "$1"
-        return $?
-    fi
-    return 0
-}
-
-cleanup_py() { 
-
-    clean_up_dir "${1}/${pyt_cache}" || { return 1; }
-    clean_up_dir "${1}/${pyc}" || { return 1; }
-    return 0
-}
-
 execute_clean() {
-    # cleanup_py "${script_dir}/" || { return 1; }
-    # cleanup_py "${script_dir}/src" || { return 1; }
-    # cleanup_py "${script_dir}/src/templatepackage" || { return 1; }
-    # cleanup_py "${script_dir}/src/tests" || { return 1; }
     
     find "${script_dir}" -type d -name ".pytest_cache*" -exec rm -rf {} + || { return 1; }
     find "${script_dir}" -type d -name "__pycache__*" -exec rm -rf {} + || { return 1; }
+    find "${script_dir}" -type d -name ".coverage*" -exec rm -rf {} + || { return 1; }
+    rm -rf "${script_dir}/output/coverage"
     ## TODO: Extend to support specific envirionment 
     return 0
 }
