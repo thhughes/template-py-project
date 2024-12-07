@@ -53,18 +53,20 @@ clean_up_dir() {
 }
 
 cleanup_py() { 
-    pyt_cache=".pytest_cache"
-    pyc="__pycache__"
+
     clean_up_dir "${1}/${pyt_cache}" || { return 1; }
     clean_up_dir "${1}/${pyc}" || { return 1; }
     return 0
 }
 
 execute_clean() {
-    cleanup_py "${script_dir}/" || { return 1; }
-    cleanup_py "${script_dir}/src" || { return 1; }
-    cleanup_py "${script_dir}/src/templatepackage" || { return 1; }
-    cleanup_py "${script_dir}/src/tests" || { return 1; }
+    # cleanup_py "${script_dir}/" || { return 1; }
+    # cleanup_py "${script_dir}/src" || { return 1; }
+    # cleanup_py "${script_dir}/src/templatepackage" || { return 1; }
+    # cleanup_py "${script_dir}/src/tests" || { return 1; }
+    
+    find "${script_dir}" -type d -name ".pytest_cache*" -exec rm -rf {} + || { return 1; }
+    find "${script_dir}" -type d -name "__pycache__*" -exec rm -rf {} + || { return 1; }
     ## TODO: Extend to support specific envirionment 
     return 0
 }
