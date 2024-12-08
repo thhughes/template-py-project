@@ -438,7 +438,20 @@ disable=raw-checker-failed,
         deprecated-pragma,
         use-symbolic-message-instead,
         use-implicit-booleaness-not-comparison-to-string,
-        use-implicit-booleaness-not-comparison-to-zero
+        use-implicit-booleaness-not-comparison-to-zero, 
+        ## Non Default Optional removals Below 
+        ## Dropping docstrings becuase they're nice but not necessary
+        # missing-class-docstring,
+        # missing-function-docstring, 
+        # missing-module-docstring,
+        ## I don't know why python needs these, but they're annoying
+        # trailing-whitespace, 
+        ## Pass used in development. 
+        # unnecessary-pass,
+        ## Hurful for classes that are expected to grow but haven't yet
+        # too-few-public-methods
+        
+
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -637,7 +650,7 @@ callbacks=cb_,
 dummy-variables-rgx=_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
 
 # Argument names that match this expression will be ignored.
-ignored-argument-names=_.*|^ignored_|^unused_
+ignored-argument-names=_.*|^ignored_|^unused_|arg|args|kwargs
 
 # Tells whether we should check for unused import in __init__ files.
 init-import=no
